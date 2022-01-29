@@ -3,52 +3,103 @@ import NewsItem from "./NewsItem";
 import { Component } from "react/cjs/react.development";
 
 export class News extends Component {
-    
-
-  constructor(){
+  constructor() {
     super();
     // console.log("This is default constructor")
-    this.state = { 
+    this.state = {
       articles: [],
-      loading: false
+      loading: false,
+      page:1
+    };
+  }
+
+  // async componentDidMount() {
+  //   let url =
+  //     "https://newsapi.org/v2/top-headlines?country=in&apiKey=e2d07db037d745eaac773e02eda71370&page=1";
+  //   let rowData = await fetch(url);
+  //   let finalData = await rowData.json();
+  //   this.setState({
+  //     articles: finalData.articles,
+  //     totalResults: finalData.totalResults
+  //   });
+  // }
+
+  prevClick = async ()=>{
+    console.log("Previous");
+      let url =
+      `https://newsapi.org/v2/top-headlines?country=in&apiKey=e2d07db037d745eaac773e02eda71370&page=${this.state.page - 1}&pagesize=16`;
+      let rowData = await fetch(url);
+    let finalData = await rowData.json();
+    this.setState({
+      articles: finalData.articles,
+      totalResults: finalData.totalResults
+    });
+
+  }
+
+  nextClick = async ()=>{
+    console.log("Next");
+    if(this.state.page + 1 > Math.ceil(this.state.totalResults/16)){
+
+    }
+    
+    else{
+      let url =
+    `https://newsapi.org/v2/top-headlines?country=in&apiKey=e2d07db037d745eaac773e02eda71370&page=${this.state.page + 1}&pagesize=16`;
+    let rowData = await fetch(url);
+    let finalData = await rowData.json();
+    this.setState({
+      page:this.state.page + 1,
+      articles: finalData.articles,
+
+    });
+
     }
   }
 
 
-  async componentDidMount(){
-    let url = "https://newsapi.org/v2/top-headlines?country=in&apiKey=e2d07db037d745eaac773e02eda71370";
-    let rowData = await fetch(url);
-    let finalData = await rowData.json()
-    this.setState({
-      articles:finalData.articles
-    })
-
-  }
 
   render() {
     // console.log(this.state.articles)
-    const {articles} = this.state;
+    const { articles } = this.state;
     return (
       <>
         <div className="container mx-auto">
           <h1 className="text-center text-4xl my-4">Top Headings</h1>
           <div className="grid grid-cols-4 gap-1">
-            { articles && articles.map((element)=>{
-              {/* console.log(element); */}
-             return <div className="flex" key={element.url}>
-               <div className="basis mx-1 my-1">
-                <NewsItem
-                  title={element.title.slice(0, 45)}
-                  description={element.description.slice(0, 88)}
-                  imgUrl={element.urlToImage}
-                  newsUrl={element.url}
-                />
-              </div>
-              </div>
-            })}
+            {articles &&
+              articles.map((element) => {
+                {
+                  /* console.log(element); */
+                }
+                return (
+                  <div className="flex" key={element.url}>
+                    <div className="basis mx-1 my-1">
+                      <NewsItem
+                        title={element.title.slice(0, 45)}
+                        description={element.description.slice(0, 88)}
+                        imgUrl={element.urlToImage}
+                        newsUrl={element.url}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
           </div>
-       
-    
+          <div className="container flex justify-between">
+            <button
+              type="button"
+              className="text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-800 dark:border-gray-700"
+              onClick={this.prevClick}>
+              &larr; Previous{" "}
+            </button>
+            <button
+              type="button"
+              className="text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-800 dark:border-gray-700"
+              onClick={this.nextClick}>
+              Next &rarr;
+            </button>
+          </div>
         </div>
       </>
     );
