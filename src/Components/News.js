@@ -2,8 +2,21 @@ import React from "react";
 import NewsItem from "./NewsItem";
 import { Component } from "react/cjs/react.development";
 import Spinner from "./Spinner";
+import PropTypes from 'prop-types';
 
 export default class News extends Component {
+  static defaultProps = {
+      pageSize: 12,
+      country: 'in',
+      category: 'general'
+  }
+
+  static propsTypes = {
+      pageSize: PropTypes.number.isRequired,
+      country: PropTypes.string.isRequired,
+      category: PropTypes.string.isRequired
+  }
+
   constructor() {
     super();
     // console.log("This is default constructor")
@@ -16,7 +29,7 @@ export default class News extends Component {
 
   async componentDidMount() {
     let url =
-      `https://newsapi.org/v2/top-headlines?country=in&apiKey=e2d07db037d745eaac773e02eda71370&page=${this.state.page - 1}&pagesize=${this.props.pageSize}`;
+      `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=e2d07db037d745eaac773e02eda71370&page=${this.state.page - 1}&pagesize=${this.props.pageSize}`;
       this.setState({
         loading:true
       });
@@ -32,7 +45,7 @@ export default class News extends Component {
   prevClick = async ()=>{
     console.log("Previous");
       let url =
-      `https://newsapi.org/v2/top-headlines?country=in&apiKey=e2d07db037d745eaac773e02eda71370&page=${this.state.page - 1}&pagesize=${this.props.pageSize}`;
+      `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=e2d07db037d745eaac773e02eda71370&page=${this.state.page - 1}&pagesize=${this.props.pageSize}`;
       this.setState({
         loading:true
       });
@@ -48,10 +61,10 @@ export default class News extends Component {
 
   nextClick = async ()=>{
     console.log("Next");
-    if(!(this.state.page + 1 > Math.ceil(this.state.totalResults/16))){
+    if(!(this.state.page + 1 > Math.ceil(this.state.totalResults/this.setState.pageSize))){
 
       let url =
-    `https://newsapi.org/v2/top-headlines?country=in&apiKey=e2d07db037d745eaac773e02eda71370&&page=${this.state.page + 1}&pagesize=${this.props.pageSize}`;
+    `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=e2d07db037d745eaac773e02eda71370&page=${this.state.page + 1}&pagesize=${this.props.pageSize}`;
     this.setState({
       loading:true
     });
@@ -84,8 +97,8 @@ export default class News extends Component {
                   <div className="flex" key={element.url}>
                     <div className="basis mx-1 my-1">
                       <NewsItem
-                        title={element.title?element.title.slice(0, 45):""}
-                        description={element.description?element.description.slice(0, 88):""}
+                        title={element.title?element.title.slice(0, 45):''}
+                        description={element.description?element.description.slice(0, 88):''}
                         imgUrl={element.urlToImage?element.urlToImage:"https://www.sketchappsources.com/resources/source-image/news-iOS9-glmrvn.png"}
                         newsUrl={element.url}
                       />
