@@ -7,9 +7,9 @@ import Navbar from './Components/Navbar';
 export default class App extends Component {
   render() {
     return ( 
-      <> 
+       <> 
         <Navbar/>
-        <News pageSize={12} country="in" category="science"/>
+        <News pageSize={12} country="in" category="sports"/>
         </>
       )
   }
