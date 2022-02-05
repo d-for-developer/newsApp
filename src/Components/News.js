@@ -17,14 +17,19 @@ export default class News extends Component {
     category: PropTypes.string.isRequired,
   };
 
-  constructor() {
-    super();
+  capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  constructor(props) {
+    super(props);
     // console.log("This is default constructor")
     this.state = {
       articles: [],
       loading: false,
       page: 1,
     };
+      document.title = `${this.capitalizeFirstLetter(this.props.category)} | NewsApp` 
   }
 
   async componentDidMount() {
@@ -111,7 +116,7 @@ export default class News extends Component {
     return (
       <>
         <div className="container mx-auto">
-          <h1 className="text-center text-4xl my-4">Top Headings</h1>
+          <h1 className="text-center text-2xl my-4 py-4">NewsApp - Top Headings from {this.capitalizeFirstLetter(this.props.category)}</h1>
           {this.state.loading && <Spinner />}
           <div className="grid grid-cols-4 gap-1">
             {articles &&
