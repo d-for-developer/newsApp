@@ -3,6 +3,7 @@ import NewsItem from "./NewsItem";
 import { Component } from "react/cjs/react.development";
 import Spinner from "./Spinner";
 import PropTypes from "prop-types";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export default class News extends Component {
   static defaultProps = {
@@ -19,7 +20,7 @@ export default class News extends Component {
 
   capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -28,8 +29,11 @@ export default class News extends Component {
       articles: [],
       loading: false,
       page: 1,
+      totalResults: 0,
     };
-      document.title = `${this.capitalizeFirstLetter(this.props.category)} | NewsApp` 
+    document.title = `${this.capitalizeFirstLetter(
+      this.props.category
+    )} | NewsApp`;
   }
 
   async componentDidMount() {
@@ -61,11 +65,18 @@ export default class News extends Component {
     let rowData = await fetch(url);
     let finalData = await rowData.json();
     this.setState({
-      articles: finalData.articles,
+      articles: this.state.articles.concat(finalData.articles),
       totalResults: finalData.totalResults,
       loading: false,
     });
   }
+
+  fetchMoreData = () => {
+      this.setState({
+        page:this.state.page + 1
+      })
+      this.updateNews()
+  };
 
   prevClick = async () => {
     // console.log("Previous");
@@ -107,7 +118,6 @@ export default class News extends Component {
     // }
     this.setState({ page: this.state.page - 1 });
     this.updateNews();
-
   };
 
   render() {
@@ -116,37 +126,49 @@ export default class News extends Component {
     return (
       <>
         <div className="container mx-auto">
-          <h1 className="text-center text-2xl my-4 py-4">NewsApp - Top Headings from {this.capitalizeFirstLetter(this.props.category)}</h1>
-          {this.state.loading && <Spinner />}
-          <div className="grid grid-cols-4 gap-1">
-            {articles &&
-              articles.map((element) => {
-                return (
-                  <div className="flex" key={element.url}>
-                    <div className="basis mx-1 my-1">
-                      <NewsItem
-                        title={element.title ? element.title.slice(0, 45) : ""}
-                        description={
-                          element.description
-                            ? element.description.slice(0, 88)
-                            : ""
-                        }
-                        imgUrl={
-                          element.urlToImage
-                            ? element.urlToImage
-                            : "https://www.sketchappsources.com/resources/source-image/news-iOS9-glmrvn.png"
-                        }
-                        newsUrl={element.url}
-                        author={element.author ? element.author : "Unknown"}
-                        date={element.publishedAt}
-                        source={element.source.name}
-                      />
+          <h1 className="text-center text-2xl my-4 py-4">
+            NewsApp - Top Headings from{" "}
+            {this.capitalizeFirstLetter(this.props.category)}
+          </h1>
+          {/* {this.state.loading && <Spinner />} */}
+          <InfiniteScroll
+            dataLength={this.state.articles.length}
+            next={this.fetchMoreData}
+            hasMore={this.state.articles.length !== this.state.totalResults}
+            loader={this.state.loading && <Spinner />}
+          >
+            <div className="grid grid-cols-4 gap-1">
+              {articles &&
+                articles.map((element) => {
+                  return (
+                    <div className="flex" key={element.url}>
+                      <div className="basis mx-1 my-1">
+                        <NewsItem
+                          title={
+                            element.title ? element.title.slice(0, 45) : ""
+                          }
+                          description={
+                            element.description
+                              ? element.description.slice(0, 88)
+                              : ""
+                          }
+                          imgUrl={
+                            element.urlToImage
+                              ? element.urlToImage
+                              : "https://www.sketchappsources.com/resources/source-image/news-iOS9-glmrvn.png"
+                          }
+                          newsUrl={element.url}
+                          author={element.author ? element.author : "Unknown"}
+                          date={element.publishedAt}
+                          source={element.source.name}
+                        />
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-          </div>
-          <div className="container flex justify-between">
+                  );
+                })}
+            </div>
+          </InfiniteScroll>
+          {/* <div className="container flex justify-between">
             <button
               disabled={this.state.page <= 1}
               type="button"
@@ -166,7 +188,7 @@ export default class News extends Component {
             >
               Next &rarr;
             </button>
-          </div>
+          </div> */}
         </div>
       </>
     );
