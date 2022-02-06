@@ -55,7 +55,9 @@ export default class News extends Component {
   }
 
   async updateNews() {
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country
+    
+    this.props.setProgress(0)
+    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country
       }&category=${this.props.category
       }&apiKey=e2d07db037d745eaac773e02eda71370&page=${this.state.page - 1
       }&pagesize=${this.props.pageSize}`;
@@ -69,6 +71,7 @@ export default class News extends Component {
       totalResults: finalData.totalResults,
       loading: false,
     });
+    this.props.setProgress(100)
   }
 
   fetchMoreData = () => {
