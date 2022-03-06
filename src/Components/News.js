@@ -39,7 +39,7 @@ export default class News extends Component {
   async componentDidMount() {
     // let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country
     //   }&category=${this.props.category
-    //   }&apiKey=e2d07db037d745eaac773e02eda71370&page=${this.state.page - 1
+    //   }&apiKey=${this.props.apiKey}&page=${this.state.page - 1
     //   }&pagesize=${this.props.pageSize}`;
     // this.setState({
     //   loading: true,
@@ -59,7 +59,7 @@ export default class News extends Component {
     this.props.setProgress(0)
     const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country
       }&category=${this.props.category
-      }&apiKey=e2d07db037d745eaac773e02eda71370&page=${this.state.page - 1
+      }&apiKey=${this.props.apiKey}&page=${this.state.page - 1
       }&pagesize=${this.props.pageSize}`;
     this.setState({
       loading: true,
@@ -84,7 +84,7 @@ export default class News extends Component {
   prevClick = async () => {
     // console.log("Previous");
     //   let url =
-    //   `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=e2d07db037d745eaac773e02eda71370&page=${this.state.page - 1}&pagesize=${this.props.pageSize}`;
+    //   `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page - 1}&pagesize=${this.props.pageSize}`;
     //   this.setState({
     //     loading:true
     //   });
@@ -105,7 +105,7 @@ export default class News extends Component {
     // if(!(this.state.page + 1 > Math.ceil(this.state.totalResults/this.setState.pageSize))){
 
     //   let url =
-    // `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=e2d07db037d745eaac773e02eda71370&page=${this.state.page + 1}&pagesize=${this.props.pageSize}`;
+    // `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page + 1}&pagesize=${this.props.pageSize}`;
     // this.setState({
     //   loading:true
     // });
