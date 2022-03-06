@@ -5,13 +5,11 @@ import CardBody from "@material-tailwind/react/CardBody";
 import CardFooter from "@material-tailwind/react/CardFooter";
 import H6 from "@material-tailwind/react/Heading6";
 import Paragraph from "@material-tailwind/react/Paragraph";
-import { Component } from 'react/cjs/react.development';
 
 
-export default class NewsItem extends Component {
-    render() {
-        let { title, description, imgUrl, newsUrl, author, date, source } = this.props;
-
+const NewsItem  = (props) => {
+  
+        let { title, description, imgUrl, newsUrl, author, date, source } = props;
         return (
             <>
                 <div className='my-3'>
@@ -47,6 +45,8 @@ export default class NewsItem extends Component {
                 </div>
             </>
         )
-    }
+    
 
 }
+
+export default NewsItem
